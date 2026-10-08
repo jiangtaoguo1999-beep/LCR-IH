@@ -79,11 +79,11 @@ python src/eval.py --config configs/default.yaml
 If you use this project in your research, please cite the paper:
 
 ```bibtex
-@article{yourpaper2025,
+@article{guo2026,
   title={Local-Cropout-Robust Image Hiding via Redundant Auxiliary Embedding and Mask-Aware Secret Enhancement},
-  author={Anonymous Authors},
-  journal={ArXiv},
-  year={2025}
+  author={Jiangtao Guo, Buwei Tian, Xiaomeng Li, Jie Gui and Lu Dong},
+  journal={},
+  year={}
 }
 ```
 
