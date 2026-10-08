@@ -1,0 +1,33 @@
+# .gitignore
+
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Training outputs
+checkpoints/
+results/
+logs/
+wandb/
+
+# Large datasets
+data/
+*.zip
+*.tar
+*.tar.gz
+
+# Environment files
+.env
+.env.*
