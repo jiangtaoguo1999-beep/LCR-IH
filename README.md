@@ -2,16 +2,17 @@
 
 Local-Cropout-Robust Image Hiding via Redundant Auxiliary Embedding and Mask-Aware Secret Enhancement
 
-This repository contains the public code release scaffold for the LCR-IH project, including:
+This repository contains a public research code scaffold for the LCR-IH project.
 
-- training and evaluation scripts
-- dataset utilities
-- experiment configuration for DIV2K-based robustness tests
-- project organization for open-sourcing a research codebase
+## Project overview
 
-## Paper summary
+This codebase is organized for image-hiding experiments under local crop attacks. It includes:
 
-Local cropping is a common degradation in practical image transmission that may remove part of a stego-image and severely compromise hidden information. LCR-IH addresses this problem by combining redundant auxiliary embedding with mask-aware secret enhancement to improve robustness against local cropping while preserving visual quality.
+- training scripts
+- evaluation scripts
+- dataset loading utilities
+- public configuration files
+- metric utilities
 
 ## Repository structure
 
@@ -21,6 +22,7 @@ LCR-IH/
 ├── LICENSE
 ├── .gitignore
 ├── requirements.txt
+├── critic.py
 ├── config_finetune_dvi2k.py
 ├── config_finetune.py
 ├── config_finetune_coco.py
@@ -30,6 +32,10 @@ LCR-IH/
 ├── src/
 │   ├── __init__.py
 │   └── ...
+├── configs/
+│   └── README.md
+├── scripts/
+│   └── README.md
 ├── docs/
 │   └── installation.md
 ├── examples/
@@ -38,23 +44,49 @@ LCR-IH/
     └── demo.ipynb
 ```
 
-## Quick start
+## Data and paths
 
-1. Install dependencies:
+To protect user privacy, all machine-specific absolute paths have been removed from the public repository. Before running the code, please prepare your own data folders and configure the corresponding directories in the config files.
+
+Recommended directory layout:
+
+```text
+LCR-IH/
+data/
+├── DIV2K_train/
+├── DIV2K_valid/
+├── COCO/
+└── outputs/
+```
+
+You can set paths like:
+
+```python
+DIV2K_train_dir = "./data/DIV2K_train"
+DIV2K_valid_dir = "./data/DIV2K_valid"
+COCO_dir = "./data/COCO"
+output_dir = "./outputs"
+```
+
+## Requirements
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Configure dataset paths and checkpoints in the config files.
+## Quick start
 
-3. Train the model:
+1. Prepare data in `./data/`.
+2. Modify the config file paths in `config_finetune_dvi2k.py` or `config_finetune_coco.py`.
+3. Train:
 
 ```bash
 python train_StegFormer_single_image_finetune.py --config_module config_finetune_dvi2k
 ```
 
-4. Run evaluation:
+4. Evaluate:
 
 ```bash
 python test_save_single_image_hiding_finetune_coco.py --config config_finetune_coco
@@ -62,14 +94,10 @@ python test_save_single_image_hiding_finetune_coco.py --config config_finetune_c
 
 ## Notes
 
-- This repo is ready to receive the full research codebase for model implementations and evaluation utilities.
-- The code files included here are the main training/evaluation scripts you provided and are intended to be adapted to your local project structure.
-- External files such as `stegformer_crop_model1.py` and `critic.py` must be present in the same runtime environment if they are not included in this repository yet.
+- This repository intentionally avoids embedding personal or machine-specific paths.
+- Private paths such as cluster directories or local server directories should be configured locally by the user before running experiments.
+- The repository is intended as a clean public-facing code scaffold for research sharing.
 
 ## License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
-
-## Citation
-
-If you use this project in your research, please cite the relevant paper.

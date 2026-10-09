@@ -7,10 +7,14 @@ from PIL import Image
 import albumentations as A
 import cv2
 from albumentations.pytorch import ToTensorV2
-import config
-args = config.Args()
 
-# albumentations 变换
+# Public-safe default dataset paths; replace with local paths as needed.
+DIV2K_train_dir = "./data/DIV2K_train"
+DIV2K_valid_dir = "./data/DIV2K_valid"
+COCO_dir = "./data/COCO"
+
+
+# albumentations transforms
 transform_A = A.Compose([
     A.RandomCrop(width=256, height=256),
     A.RandomRotate90(),
@@ -35,16 +39,12 @@ transform_A_test_256 = A.Compose([
     ToTensorV2()
 ])
 
-DIV2K_path = '/seu_nvme/home/230240036/projects/DIV2K_train_HR_20250605152066/DIV2K_train_HR'
-DIV2K_path_valid = '/seu_nvme/home/230240036/projects/DIV2K_valid_HR_20250605152066/DIV2K_valid_HR'
-batchsize = 12
-
 
 class DIV2K_Split_Dataset(Dataset):
     def __init__(self, transforms_=None, image_type='cover'):
         self.transform = transforms_
         self.image_type = image_type
-        all_files = natsorted(sorted(glob.glob(DIV2K_path_valid + "/*.png")))
+        all_files = natsorted(sorted(glob.glob(f"{DIV2K_valid_dir}/*.png")))
         if image_type == 'cover':
             self.files = all_files[:50]
         elif image_type == 'secret':
@@ -70,9 +70,9 @@ class DIV2K_Dataset(Dataset):
         self.transform = transforms_
         self.mode = mode
         if mode == 'train':
-            self.files = natsorted(sorted(glob.glob(DIV2K_path + "/*.png")))
+            self.files = natsorted(sorted(glob.glob(f"{DIV2K_train_dir}/*.png")))
         else:
-            self.files = natsorted(sorted(glob.glob(DIV2K_path_valid + "/*.png")))
+            self.files = natsorted(sorted(glob.glob(f"{DIV2K_valid_dir}/*.png")))
 
     def __getitem__(self, index):
         img = cv2.imread(self.files[index])
@@ -89,7 +89,7 @@ class DIV2K_Dataset(Dataset):
 class COCO_Test_Dataset(Dataset):
     def __init__(self, transforms_=None):
         self.transform = transforms_
-        self.files = natsorted(sorted(glob.glob("/seu_nvme/ogai/datasets/coco2017/test2017" + "/*." + "jpg")))
+        self.files = natsorted(sorted(glob.glob(f"{COCO_dir}/*.jpg")))
 
     def __getitem__(self, index):
         img = cv2.imread(self.files[index])
@@ -101,125 +101,3 @@ class COCO_Test_Dataset(Dataset):
 
     def __len__(self):
         return len(self.files)
-
-
-DIV2K_train_cover_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A, mode="train"),
-    batch_size=args.single_batch_size,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=8,
-    drop_last=True
-)
-
-DIV2K_train_secret_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A, mode="train"),
-    batch_size=args.single_batch_size,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=8,
-    drop_last=True
-)
-
-DIV2K_val_cover_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A_valid, mode="val"),
-    batch_size=args.single_batch_size,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=2,
-    drop_last=True
-)
-
-DIV2K_val_secret_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A_valid, mode="val"),
-    batch_size=args.single_batch_size,
-    shuffle=False,
-    pin_memory=True,
-    num_workers=2,
-    drop_last=True
-)
-
-DIV2K_multi_train_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A, mode="train"),
-    batch_size=args.multi_batch_iteration,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=16,
-    drop_last=True
-)
-
-DIV2K_multi_val_loader = DataLoader(
-    DIV2K_Dataset(transforms_=transform_A_valid, mode="val"),
-    batch_size=args.multi_batch_iteration,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=16,
-    drop_last=True
-)
-
-DIV2K_test_cover_loader = DataLoader(
-    DIV2K_Split_Dataset(transforms_=transform_A_test, image_type='cover'),
-    batch_size=1,
-    shuffle=False,
-    pin_memory=True,
-    num_workers=1,
-    drop_last=False
-)
-
-DIV2K_test_secret_loader = DataLoader(
-    DIV2K_Split_Dataset(transforms_=transform_A_test, image_type='secret'),
-    batch_size=1,
-    shuffle=False,
-    pin_memory=True,
-    num_workers=1,
-    drop_last=False
-)
-
-DIV2K_multi_test_loader = DataLoader(
-    DIV2K_Split_Dataset(transforms_=transform_A_test, image_type='cover'),
-    batch_size=args.test_multi_batch_size,
-    shuffle=False,
-    pin_memory=True,
-    num_workers=1,
-    drop_last=False
-)
-
-COCO_test_multi_loader = DataLoader(
-    COCO_Test_Dataset(transforms_=transform_A_test_256),
-    batch_size=args.test_multi_batch_size,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=1,
-    drop_last=True
-)
-
-COCO_test_cover_loader = DataLoader(
-    COCO_Test_Dataset(transforms_=transform_A_test_256),
-    batch_size=1,
-    shuffle=True,
-    pin_memory=True,
-    num_workers=1,
-    drop_last=True
-)
-
-COCO_test_secret_loader = DataLoader(
-    COCO_Test_Dataset(transforms_=transform_A_test_256),
-    batch_size=1,
-    shuffle=True,
-    pin_memory=False,
-    num_workers=1,
-    drop_last=True
-)
-
-
-if __name__ == "__main__":
-    print("=" * 50)
-    print("测试数据加载器信息:")
-    print(f"载体图像数量: {len(DIV2K_test_cover_loader.dataset)}")
-    print(f"秘密图像数量: {len(DIV2K_test_secret_loader.dataset)}")
-    print("=" * 50)
-
-    for i, (cover, secret) in enumerate(zip(DIV2K_test_cover_loader, DIV2K_test_secret_loader)):
-        print(f"Pair {i+1}: Cover shape: {cover.shape}, Secret shape: {secret.shape}")
-        if i >= 2:
-            break
