@@ -2,16 +2,16 @@
 
 Local-Cropout-Robust Image Hiding via Redundant Auxiliary Embedding and Mask-Aware Secret Enhancement
 
-This repository is the public release scaffold for the paper "Local-Cropout-Robust Image Hiding via Redundant Auxiliary Embedding and Mask-Aware Secret Enhancement".
+This repository contains the public code release scaffold for the LCR-IH project, including:
 
-The project focuses on image hiding under local cropping attacks, where part of the stego-image may be removed during transmission. The proposed framework combines redundant auxiliary embedding with a mask-aware secret enhancement module to improve recovery robustness and visual fidelity.
+- training and evaluation scripts
+- dataset utilities
+- experiment configuration for DIV2K-based robustness tests
+- project organization for open-sourcing a research codebase
 
-## Project overview
+## Paper summary
 
-- Robust recovery from locally cropped stego-images
-- Redundant auxiliary secret embedding
-- Mask-aware enhancement for missing regions
-- Improved structural consistency and local detail preservation
+Local cropping is a common degradation in practical image transmission that may remove part of a stego-image and severely compromise hidden information. LCR-IH addresses this problem by combining redundant auxiliary embedding with mask-aware secret enhancement to improve robustness against local cropping while preserving visual quality.
 
 ## Repository structure
 
@@ -21,82 +21,55 @@ LCR-IH/
 ├── LICENSE
 ├── .gitignore
 ├── requirements.txt
+├── config_finetune3_6_dvi2k.py
+├── config_finetune3_6.py
+├── config_finetune3_6_coco.py
+├── datasets.py
+├── train_StegFormer_single_image_finetune3_6.py
+├── test_save_single_image_hiding_finetune3_6_coco.py
 ├── src/
 │   ├── __init__.py
-│   ├── models/
-│   ├── datasets/
-│   ├── utils/
-│   └── train.py
-├── scripts/
-│   ├── train.sh
-│   └── eval.sh
-├── configs/
-│   └── default.yaml
-├── examples/
-│   └── README.md
+│   └── ...
 ├── docs/
 │   └── installation.md
+├── examples/
+│   └── README.md
 └── notebooks/
     └── demo.ipynb
 ```
 
-## Installation
+## Quick start
 
-### Requirements
-
-- Python >= 3.9
-- PyTorch >= 2.0
-- torchvision
-- numpy
-- pillow
-- opencv-python
-- tqdm
-
-Install dependencies:
+1. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Quick start
+2. Configure dataset paths and checkpoints in the config files.
 
-1. Prepare the dataset.
-2. Configure training or evaluation settings in `configs/default.yaml`.
 3. Train the model:
 
 ```bash
-python src/train.py --config configs/default.yaml
+python train_StegFormer_single_image_finetune3_6.py --config_module config_finetune3_6_dvi2k
 ```
 
-4. Evaluate on cropped stego-images:
+4. Run evaluation:
 
 ```bash
-python src/eval.py --config configs/default.yaml
+python test_save_single_image_hiding_finetune3_6_coco.py --config config_finetune3_6_coco
 ```
-
-## Citation
-
-If you use this project in your research, please cite the paper:
-
-```bibtex
-@article{guo2026,
-  title={Local-Cropout-Robust Image Hiding via Redundant Auxiliary Embedding and Mask-Aware Secret Enhancement},
-  author={Jiangtao Guo, Buwei Tian, Xiaomeng Li, Jie Gui and Lu Dong},
-  journal={},
-  year={}
-}
-```
-
-Please replace the BibTeX metadata with the final author list and paper details once the official publication metadata is available.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ## Notes
 
-This repository is organized as a clean public release scaffold for the LCR-IH project. The implementation files and experiment scripts can be added under `src/`, `configs/`, and `scripts/` according to the research codebase. If you are releasing the full implementation, we recommend keeping the final training/evaluation pipeline, model definitions, dataset utilities, and reproducibility scripts in this structure.
+- This repo is ready to receive the full research codebase for model implementations and evaluation utilities.
+- The code files included here are the main training/evaluation scripts you provided and are intended to be adapted to your local project structure.
+- External files such as `stegformer_crop_model1.py` and `critic.py` must be present in the same runtime environment if they are not included in this repository yet.
 
-## Contact
+## License
 
-For questions or collaboration requests, please open an issue in this repository.
+This project is licensed under the MIT License. See `LICENSE` for details.
+
+## Citation
+
+If you use this project in your research, please cite the relevant paper.
