@@ -14,6 +14,11 @@ This codebase is organized for image-hiding experiments under local crop attacks
 - public configuration files
 - metric utilities
 
+## Related work
+
+For detailed StegFormer implementation details, please refer to:
+**"Stegformer: Rebuilding the glory of autoencoder-based steganography"**
+
 ## Repository structure
 
 ```text
