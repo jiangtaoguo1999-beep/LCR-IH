@@ -40,29 +40,17 @@ DIV2K_path_valid = '/seu_nvme/home/230240036/projects/DIV2K_valid_HR_20250605152
 batchsize = 12
 
 
-# ========== 新增：分离载体和秘密图像的数据集类 ==========
 class DIV2K_Split_Dataset(Dataset):
-    """
-    从验证集中分离前50张作为载体图像，后50张作为秘密图像
-    """
     def __init__(self, transforms_=None, image_type='cover'):
-        """
-        Args:
-            transforms_: 数据增强变换
-            image_type: 'cover' (载体图像，前50张) 或 'secret' (秘密图像，后50张)
-        """
         self.transform = transforms_
         self.image_type = image_type
-
         all_files = natsorted(sorted(glob.glob(DIV2K_path_valid + "/*.png")))
-
         if image_type == 'cover':
             self.files = all_files[:50]
         elif image_type == 'secret':
             self.files = all_files[50:100]
         else:
             raise ValueError("image_type must be 'cover' or 'secret'")
-
         print(f"Loaded {len(self.files)} images for {image_type}")
 
     def __getitem__(self, index):
@@ -77,7 +65,6 @@ class DIV2K_Split_Dataset(Dataset):
         return len(self.files)
 
 
-# 原有的数据集类保持不变
 class DIV2K_Dataset(Dataset):
     def __init__(self, transforms_=None, mode='train'):
         self.transform = transforms_
@@ -102,8 +89,7 @@ class DIV2K_Dataset(Dataset):
 class COCO_Test_Dataset(Dataset):
     def __init__(self, transforms_=None):
         self.transform = transforms_
-        self.files = natsorted(
-            sorted(glob.glob("/seu_nvme/ogai/datasets/coco2017/test2017" + "/*." + "jpg")))
+        self.files = natsorted(sorted(glob.glob("/seu_nvme/ogai/datasets/coco2017/test2017" + "/*." + "jpg")))
 
     def __getitem__(self, index):
         img = cv2.imread(self.files[index])
@@ -117,7 +103,6 @@ class COCO_Test_Dataset(Dataset):
         return len(self.files)
 
 
-# ========== 训练数据加载器（保持不变）==========
 DIV2K_train_cover_loader = DataLoader(
     DIV2K_Dataset(transforms_=transform_A, mode="train"),
     batch_size=args.single_batch_size,
@@ -172,8 +157,6 @@ DIV2K_multi_val_loader = DataLoader(
     drop_last=True
 )
 
-
-# ========== 新的测试数据加载器：使用分离的数据集 ==========
 DIV2K_test_cover_loader = DataLoader(
     DIV2K_Split_Dataset(transforms_=transform_A_test, image_type='cover'),
     batch_size=1,

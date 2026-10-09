@@ -21,12 +21,12 @@ LCR-IH/
 ├── LICENSE
 ├── .gitignore
 ├── requirements.txt
-├── config_finetune3_6_dvi2k.py
-├── config_finetune3_6.py
-├── config_finetune3_6_coco.py
+├── config_finetune_dvi2k.py
+├── config_finetune.py
+├── config_finetune_coco.py
 ├── datasets.py
-├── train_StegFormer_single_image_finetune3_6.py
-├── test_save_single_image_hiding_finetune3_6_coco.py
+├── train_StegFormer_single_image_finetune.py
+├── test_save_single_image_hiding_finetune_coco.py
 ├── src/
 │   ├── __init__.py
 │   └── ...
@@ -51,13 +51,13 @@ pip install -r requirements.txt
 3. Train the model:
 
 ```bash
-python train_StegFormer_single_image_finetune3_6.py --config_module config_finetune3_6_dvi2k
+python train_StegFormer_single_image_finetune.py --config_module config_finetune_dvi2k
 ```
 
 4. Run evaluation:
 
 ```bash
-python test_save_single_image_hiding_finetune3_6_coco.py --config config_finetune3_6_coco
+python test_save_single_image_hiding_finetune_coco.py --config config_finetune_coco
 ```
 
 ## Notes
